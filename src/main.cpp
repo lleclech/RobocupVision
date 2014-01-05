@@ -37,13 +37,13 @@ bool terrain(double R, double G){
   cov.at<double>(1,1)=;
   return Mahalanobis(point,mu,cov)<seuil;
   */
-  double seuil = 4.;
-  double e1 = 406.11914,
-    e2 = 491.43532,
-    e3 = 491.43532,
-    e4 = 723.74627;
-  double mu1 = 187.26119,
-    mu2 = 154.00789;
+  double seuil = 10.000000;
+  double e1 = 61.276426,
+    e2 = 181.41617,
+    e3 = 181.41617,
+    e4 = 854.30509;
+  double mu1 = 226.10368,
+    mu2 = 184.65723;
 
   double a = R-mu1,
     b = G - mu2;
@@ -52,7 +52,7 @@ bool terrain(double R, double G){
     eps2 = - e2/det,
     eps3 = - e3/det,
     eps4 = e1/det;
-  return  eps1*a*a + eps2*a*b + eps3*a*b + eps4*b*b < seuil;
+  return  eps1*a*a + eps2*a*b + eps3*a*b + eps4*b*b < seuil*seuil;
 }
 
 int main(void){
