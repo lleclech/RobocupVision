@@ -8,7 +8,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "segmentation/Segmentation.cpp"
+#include "segmentation/common.hpp"
  
 using namespace std;
 using namespace cv;
@@ -36,10 +36,10 @@ int main(void){
   namedWindow("modif image",1);
 
   // The three object we're interesting in
-  Segmentation but = new But();
-  Segmentation balle = new Balle();
-  Segmentation ligne = new Ligne();
-  Segmentation terrain = new Terrain();
+  Segmentation *but = new But();
+  Segmentation *balle = new Balle();
+  Segmentation *ligne = new Ligne();
+  Segmentation *terrain = new Terrain();
   
   Mat frame, frameModif;
 
@@ -59,13 +59,13 @@ int main(void){
         float U=0.492*(B-Y);
         float V=0.877*(R-Y);
 
-        if(balle.Mahalanobis(U,V)){
+        if(balle->Mahalanobis(U,V)){
           frameModif.at<Vec3b>(y,x)=Vec3b(0,127,255);
-        }else if(but.Mahalanobis(R,G)){
+        }else if(but->Mahalanobis(R,G)){
           frameModif.at<Vec3b>(y,x)=Vec3b(255,0,0);
-        }else if (ligne.Mahalanobis(G,B)){
+        }else if (ligne->Mahalanobis(G,B)){
           frameModif.at<Vec3b>(y,x)=Vec3b(0,0,0);
-        }else if (terrain.Mahalanobis(R,G)){
+        }else if (terrain->Mahalanobis(R,G)){
           frameModif.at<Vec3b>(y,x)=Vec3b(0,255,0);
         }
       }
