@@ -4,7 +4,7 @@ close all;
 clear all;
 
 %Extraction de la première image
-[A,map,alpha] = imread('../data/reference/terrain117.png');
+[A,map,alpha] = imread('../data/reference/ball135.png');
 if isempty(A)
     return;
 end
@@ -41,6 +41,10 @@ Rp =Rp(1:end);%transforme en vecteur
 Gp =Gp(1:end);
 Bp =Bp(1:end);
 
+%test changement espace colorimtrique
+Yp = 0.299*Rp + 0.587*Gp + 0.114*Bp;
+Up = 0.492*(Bp-Yp);
+Vp = 0.877*(Rp-Yp);
 
 % Après avoir récupéré les composantes RGB, je transforme mes résultats
 % pour supprimer tous les éléments superflu de notre modele (ici les 0)
@@ -49,28 +53,28 @@ m=0;
 n=0;
 p=0;
 
-for a= 1:size(Rp,2)
-    if (Rp(a) ~= 0)
+for a= 1:size(Yp,2)
+    if (Yp(a) ~= 0)
        m = m + 1;
-       R(m) = Rp(a);
+       Y(m) = Yp(a);
     end
 end
 
-for b= 1:size(Gp,2)
-    if (Gp(b) ~= 0)
+for b= 1:size(Up,2)
+    if (Up(b) ~= 0)
        n = n + 1;
-       G(n) = Gp(b);
+       U(n) = Up(b);
     end
 end
 
-for c= 1:size(Bp,2)
-    if (Bp(c) ~= 0)
+for c= 1:size(Vp,2)
+    if (Vp(c) ~= 0)
        p = p + 1;
-       B(p) = Bp(c);
+       V(p) = Vp(c);
     end
 end
 
-[T,map2,alpha2] = imread('rgb46.png');
+[T,map2,alpha2] = imread('rgb129.png');
 
 %composantes RGB (pour l'autre image)
 R2 =T (:,:,1);% prend le premier element
@@ -80,12 +84,17 @@ R2 =R2(1:end);%transforme en vecteur
 G2 =G2(1:end);
 B2 =B2(1:end);
 
+%test changement espace colorimtrique
+Y2 = 0.299*R2 + 0.587*G2 + 0.114*B2;
+U2 = 0.492*(B2-Y2);
+V2 = 0.877*(R2-Y2);
+
 %attribution des composantes 1 et 2
-C1 = R;
-C2 = G;
+C1 = U;
+C2 = V;
 C = [C1;C2];
-C1image = R2;
-C2image = G2;
+C1image = U2;
+C2image = V2;
 Cimg = [C1image;C2image];
 
 %Affiche les points
@@ -126,7 +135,7 @@ for i=1:size(Cimg,2)
 end;
 
 %determination du seuil
-seuil = 1.9;
+seuil = 15;
 %seuilmax = max(D)/10;
 
 %crée l'image binaire
@@ -142,4 +151,4 @@ end;
 figure, imshow(imgBin)
 
 %sauvegarde
-save('newterrain.txt', 'Mcov', 'Bary', '-ascii');
+save('yuvtest.txt', 'seuil', 'Mcov', 'Bary', '-ascii');

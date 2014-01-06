@@ -14,19 +14,19 @@ end
 
 
 %Ici je crée une matrice qui récupére les points non blancs dans l'image
-C = ones(size(A));
+P = ones(size(A));
 for i = 1:size(A,1)
     for j = 1:size(A,2)
         for k = 1:size(A,3)
             if (A(i,j,k) ~= 255)
-                C(i,j,k) = A(i,j,k);
+                P(i,j,k) = A(i,j,k);
             else
-                C(i,j,k) = 0;
+                P(i,j,k) = 0;
             end
         end
     end
 end
-C;
+P;
 
 %C= imcrop(A);
 %figure, imagesc(C)
@@ -34,17 +34,13 @@ C;
 
 
 %composantes RGB (pour C)
-Rp =C (:,:,1);% prend le premier element
-Gp =C (:,:,2);
-Bp =C (:,:,3);
+Rp =P (:,:,1);% prend le premier element
+Gp =P (:,:,2);
+Bp =P (:,:,3);
 Rp =Rp(1:end);%transforme en vecteur
 Gp =Gp(1:end);
 Bp =Bp(1:end);
 
-%test changement espace colorimtrique
-Yp = 0.299*Rp + 0.587*Gp + 0.114*Bp;
-Up = 0.492*(Bp-Yp);
-Vp = 0.877*(Rp-Yp);
 
 % Après avoir récupéré les composantes RGB, je transforme mes résultats
 % pour supprimer tous les éléments superflu de notre modele (ici les 0)
@@ -53,28 +49,28 @@ m=0;
 n=0;
 p=0;
 
-for a= 1:size(Yp,2)
-    if (Yp(a) ~= 0)
+for a= 1:size(Rp,2)
+    if (Rp(a) ~= 0)
        m = m + 1;
-       Y(m) = Yp(a);
+       R(m) = Rp(a);
     end
 end
 
-for b= 1:size(Up,2)
-    if (Up(b) ~= 0)
+for b= 1:size(Gp,2)
+    if (Gp(b) ~= 0)
        n = n + 1;
-       U(n) = Up(b);
+       G(n) = Gp(b);
     end
 end
 
-for c= 1:size(Vp,2)
-    if (Vp(c) ~= 0)
+for c= 1:size(Bp,2)
+    if (Bp(c) ~= 0)
        p = p + 1;
-       V(p) = Vp(c);
+       B(p) = Bp(c);
     end
 end
 
-[T,map2,alpha2] = imread('rgb129.png');
+[T,map2,alpha2] = imread('rgb46.png');
 
 %composantes RGB (pour l'autre image)
 R2 =T (:,:,1);% prend le premier element
@@ -84,18 +80,15 @@ R2 =R2(1:end);%transforme en vecteur
 G2 =G2(1:end);
 B2 =B2(1:end);
 
-%test changement espace colorimtrique
-Y2 = 0.299*R2 + 0.587*G2 + 0.114*B2;
-U2 = 0.492*(B2-Y2);
-V2 = 0.877*(R2-Y2);
-
 %attribution des composantes 1 et 2
-C1 = U;
-C2 = V;
-C = [C1;C2];
-C1image = U2;
-C2image = V2;
-Cimg = [C1image;C2image];
+C1 = R;
+C2 = G;
+C3 = B;
+C = [C1;C2;C3];
+C1image = R2;
+C2image = G2;
+C3image = B2;
+Cimg = [C1image;C2image;C3image];
 
 %Affiche les points
 %figure, plot(C1,C2,'.')
@@ -103,13 +96,17 @@ Cimg = [C1image;C2image];
 %barycentre
 baryC1 = mean(C1);
 baryC2 = mean(C2);
-Bary = [baryC1;baryC2];
+baryC3 = mean(C3);
+Bary = [baryC1;baryC2;baryC3];
 
 %variances-covariances
 varC1 = sum((C1-baryC1).^2)/size(C1,2);
 varC2 = sum((C2-baryC2).^2)/size(C2,2);
+varC3 = sum((C3-baryC3).^2)/size(C3,2);
 covarC1C2 = sum((C1-baryC1).*(C2-baryC2))/size(C1,2);
-Mcov = [varC1 covarC1C2; covarC1C2 varC2];
+covarC1C3 = sum((C1-baryC1).*(C3-baryC3))/size(C1,2);
+covarC2C3 = sum((C2-baryC2).*(C3-baryC3))/size(C2,2);
+Mcov = [varC1 covarC1C2 covarC1C3; covarC1C2 varC2 covarC2C3;covarC1C3 covarC2C3 varC3];
 
 
 %Calcul de la distance
@@ -135,7 +132,7 @@ for i=1:size(Cimg,2)
 end;
 
 %determination du seuil
-seuil = 15;
+seuil = 1.9;
 %seuilmax = max(D)/10;
 
 %crée l'image binaire
@@ -151,4 +148,4 @@ end;
 figure, imshow(imgBin)
 
 %sauvegarde
-save('caca.txt', 'seuil', 'Mcov', 'Bary', '-ascii');
+save('3Varterrain.txt', 'Mcov', 'Bary', '-ascii');
