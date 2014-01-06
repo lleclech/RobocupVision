@@ -32,6 +32,7 @@ CvPoint Robot::barycentre(Mat frameModif){
     int sommeX = 0;
     int sommeY = 0;
     CvPoint barycentre = cvPoint(-1,-1);
+    nbPixelsBall = 0;
 
     for(x = 0; x < frameModif.cols; x++) {
         for(y = 0; y < frameModif.rows; y++) {
@@ -51,11 +52,10 @@ CvPoint Robot::barycentre(Mat frameModif){
 }
 
 bool Robot::marqueur(Mat frameModif, CvPoint barycentre){
-    if(nbPixelsBall>300)
+    if(nbPixelsBall>150)
     {
         circle(frameModif,barycentre,10,CV_RGB(255,0,0),2);
         isBall=true;
-        nbPixelsBall = 0;
     }
     return EXIT_SUCCESS;
 }

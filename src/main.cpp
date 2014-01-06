@@ -80,18 +80,19 @@ int main(void){
         double Y=0.299*R+0.587*G+0.114*B;
         double U=0.492*(B-Y);
         double V=0.877*(R-Y);
-        if (terrain->Mahalanobis(R,G)){
-            frameModif.at<Vec3b>(y,x)=Vec3b(0,255,0);
-            terrain->img.at<float>(y,x)=255;
-        }else if (ligne->Mahalanobis(G,B)){
-            frameModif.at<Vec3b>(y,x)=Vec3b(255,255,255);
-            ligne->img.at<float>(y,x)=255;
-        }else if(but->Mahalanobis(R,G)){
+        if(but->Mahalanobis(R,G)){
             frameModif.at<Vec3b>(y,x)=Vec3b(255,0,0);
             but->img.at<float>(y,x)=255;
         }else if(balle->Mahalanobis(U,V)){
             frameModif.at<Vec3b>(y,x)=Vec3b(0,127,255);
             balle->img.at<float>(y,x)=255;
+        }else if (terrain->Mahalanobis(R,G)){
+            frameModif.at<Vec3b>(y,x)=Vec3b(0,255,0);
+            terrain->img.at<float>(y,x)=255;
+        }else if (ligne->Mahalanobis(G,B)){
+            frameModif.at<Vec3b>(y,x)=Vec3b(255,255,255);
+            ligne->img.at<float>(y,x)=255;
+
         }else{
           frameModif.at<Vec3b>(y,x)=Vec3b(0,0,0);
         }
