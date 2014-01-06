@@ -45,6 +45,7 @@ int main(void){
   // The two windows we'll be using
   namedWindow("image",1);
   namedWindow("modif image",1);
+   namedWindow("erode dilate",1);
 
   // The three object we're interesting in
   Segmentation *but = new But();
@@ -83,8 +84,12 @@ int main(void){
         }
       }
     }
+    Mat frameCR=frameModif.clone();
+    erode(frameCR,frameCR,Mat(),Point(-1,-1),1);
+    dilate(frameCR,frameCR,Mat(),Point(-1,-1),3);
+
     imshow("modif image", frameModif);
-      
+    imshow("erode dilate",frameCR);
     // Wait for a keypress
     int c = waitKey(1000);
     if(c!=-1){
