@@ -45,22 +45,22 @@ int main(void){
 
   for(int nb=0;nb<nbImg;nb++){
     frame = imread(path+filename+to_string(nb)+ext);//img are in BGR
+    frameModif=frame;
     imshow("image", frame);
     for(int x = 0; x < frame.cols; x++ ){
       for( int y = 0; y < frame.rows; y++ ){
         Vec3b pixel=frame.at<Vec3b>(y,x);
         //RGB
-        float R=pixel[2];
-        float G=pixel[1];
-        float B=pixel[0];
+        double R=pixel[2];
+        double G=pixel[1];
+        double B=pixel[0];
 
         //YUV convertion
-        float Y=0.299*R+0.587*G+0.114*B;
-        float U=0.492*(B-Y);
-        float V=0.877*(R-Y);
-
+        double Y=0.299*R+0.587*G+0.114*B;
+        double U=0.492*(B-Y);
+        double V=0.877*(R-Y);
         if(balle->Mahalanobis(U,V)){
-          frameModif.at<Vec3b>(y,x)=Vec3b(0,127,255);
+            frameModif.at<Vec3b>(y,x)=Vec3b(0,127,255);
         }else if(but->Mahalanobis(R,G)){
           frameModif.at<Vec3b>(y,x)=Vec3b(255,0,0);
         }else if (ligne->Mahalanobis(G,B)){
