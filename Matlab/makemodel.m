@@ -4,7 +4,7 @@ close all;
 clear all;
 
 %Extraction de la première image
-[A,map,alpha] = imread('data/reference/terrain24.png');
+[A,map,alpha] = imread('../data/reference/terrain24.png');
 if isempty(A)
     return;
 end

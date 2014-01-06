@@ -4,7 +4,7 @@ close all;
 clear all;
 
 %Extraction de la première image
-[A,map,alpha] = imread('data/reference/ball135.png');
+[A,map,alpha] = imread('../data/reference/ball135.png');
 if isempty(A)
     return;
 end
