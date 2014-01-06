@@ -20,5 +20,6 @@ using namespace cv;
 #include "But.hpp"
 #include "Terrain.hpp"
 #include "Ligne.hpp"
+#include "../robot/robot.hpp"
 
 #endif

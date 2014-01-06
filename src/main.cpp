@@ -80,30 +80,30 @@ int main(void){
         double Y=0.299*R+0.587*G+0.114*B;
         double U=0.492*(B-Y);
         double V=0.877*(R-Y);
-        if(but->Mahalanobis(R,G)){
+        if (terrain->Mahalanobis(R,G)){
+            frameModif.at<Vec3b>(y,x)=Vec3b(0,255,0);
+            terrain->img.at<float>(y,x)=255;
+        }else if (ligne->Mahalanobis(G,B)){
+            frameModif.at<Vec3b>(y,x)=Vec3b(255,255,255);
+            ligne->img.at<float>(y,x)=255;
+        }else if(but->Mahalanobis(R,G)){
             frameModif.at<Vec3b>(y,x)=Vec3b(255,0,0);
             but->img.at<float>(y,x)=255;
         }else if(balle->Mahalanobis(U,V)){
             frameModif.at<Vec3b>(y,x)=Vec3b(0,127,255);
             balle->img.at<float>(y,x)=255;
-        }else if (terrain->Mahalanobis(R,G)){
-          frameModif.at<Vec3b>(y,x)=Vec3b(0,255,0);
-          terrain->img.at<float>(y,x)=255;
-        }else if (ligne->Mahalanobis(G,B)){
-          frameModif.at<Vec3b>(y,x)=Vec3b(255,255,255);
-          ligne->img.at<float>(y,x)=255;
         }else{
           frameModif.at<Vec3b>(y,x)=Vec3b(0,0,0);
         }
       }
     }
-    //Mat frameCR=frameModif.clone();
-    //erode(frameCR,frameCR,Mat(),Point(-1,-1),1);
-    //dilate(frameCR,frameCR,Mat(),Point(-1,-1),3);
-    CvPoint barycentre = robot->barycentre(frameModif);
+    Mat frameCR=frameModif.clone();
+    erode(frameCR,frameCR,Mat(),Point(-1,-1),1);
+    dilate(frameCR,frameCR,Mat(),Point(-1,-1),3);
+    CvPoint barycentre = robot->barycentre(frameCR);
     cout << "valeur x: " << barycentre.x << "valeur y: " << barycentre.y << "nb pixel" << robot->nbPixelsBall <<endl;
-    robot->marqueur(frameModif,barycentre);
-    imshow("modif image", frameModif);
+    robot->marqueur(frameCR,barycentre);
+    imshow("modif image", frameCR);
     //imshow("erode dilate",frameCR);
     //imshow("But", but->img);
     //imshow("Balle",balle->img);
