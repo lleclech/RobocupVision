@@ -56,6 +56,8 @@ int main(void){
   Segmentation *ligne = new Ligne();
   Segmentation *terrain = new Terrain();
   
+  Robot *robot = new Robot();
+
   Mat frame, frameModif;
 
   for(int nb=0;nb<nbImg;nb++){
@@ -98,13 +100,15 @@ int main(void){
     //Mat frameCR=frameModif.clone();
     //erode(frameCR,frameCR,Mat(),Point(-1,-1),1);
     //dilate(frameCR,frameCR,Mat(),Point(-1,-1),3);
-
+    CvPoint barycentre = robot->barycentre(frameModif);
+    cout << "valeur x: " << barycentre.x << "valeur y: " << barycentre.y << "nb pixel" << robot->nbPixelsBall <<endl;
+    robot->marqueur(frameModif,barycentre);
     imshow("modif image", frameModif);
     //imshow("erode dilate",frameCR);
-    imshow("But", but->img);
-    imshow("Balle",balle->img);
-    imshow("Ligne", ligne->img);
-    imshow("Terrain",terrain->img);
+    //imshow("But", but->img);
+    //imshow("Balle",balle->img);
+    //imshow("Ligne", ligne->img);
+    //imshow("Terrain",terrain->img);
     // Wait for a keypress
     int c = waitKey(1000);
     if(c!=-1){
