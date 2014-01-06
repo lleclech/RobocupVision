@@ -36,10 +36,10 @@ int main(void){
   namedWindow("modif image",1);
 
   // The three object we're interesting in
-  Segmentation *but = new But();
-  //Segmentation balle = new Balle();
-  //Segmentation ligne = new Ligne(); 
-  //Segmentation terrain = new Terrain();
+  //Segmentation *but = new But();
+  Segmentation *balle = new Balle();
+  //Segmentation *ligne = new Ligne(); 
+  //Segmentation *terrain = new Terrain();
   
   Mat frame, frameModif;
   for(int nb=0;nb<nbImg;nb++){
@@ -49,7 +49,7 @@ int main(void){
     for(int x = 0; x < frame.cols; x++ ){
       for( int y = 0; y < frame.rows; y++ ){
 	Vec3b pixel=frame.at<Vec3b>(y,x);
-	if(but->Mahalanobis(pixel[2],pixel[1])){
+	if(balle->Mahalanobis(pixel[2],pixel[1])){
 	  frameModif.at<Vec3b>(y,x)=Vec3b(0,0,0);
 	}else{
 	  frameModif.at<Vec3b>(y,x)=Vec3b(250,250,250);
