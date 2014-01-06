@@ -8,7 +8,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "segmentation/Segmentation.cpp"
+#include "segmentation/common.hpp"
  
 using namespace std;
 using namespace cv;
@@ -37,7 +37,7 @@ int main(void){
 
   // The three object we're interesting in
   Segmentation but = new But();
-  //Segmentation ball = new Ball();
+  //Segmentation balle = new Balle();
   //Segmentation ligne = new Ligne(); 
   //Segmentation terrain = new Terrain();
   
