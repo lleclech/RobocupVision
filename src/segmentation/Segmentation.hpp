@@ -3,7 +3,7 @@
 class Segmentation{
 protected:
   Segmentation(double _seuil, double _e1, double _e2, double _e3, 
-	       double _e4, double _mu1, double _mu2){
+           double _e4, double _mu1, double _mu2){
     seuil = _seuil;
     e1 = _e1;
     e2 = _e2;
@@ -11,10 +11,13 @@ protected:
     e4 = _e4;
     mu1 = _mu1;
     mu2 = _mu2;
+    img = Mat::zeros(240,320,CV_32F);
   }
   
 public:
   virtual bool Mahalanobis(double composante1, double composante2);
+  Mat img;
+  void resetImg(){ img=Mat::zeros(240,320,CV_32F); }
   
 private:
   double seuil, e1, e2, e3, e4, mu1, mu2;
@@ -34,3 +37,5 @@ bool Segmentation::Mahalanobis(double composante1, double composante2){
     eps4 = e1/det;
   return  eps1*a*a + eps2*a*b + eps3*a*b + eps4*b*b < seuil*seuil;
 }
+
+

@@ -45,7 +45,10 @@ int main(void){
   // The two windows we'll be using
   namedWindow("image",1);
   namedWindow("modif image",1);
-   namedWindow("erode dilate",1);
+  namedWindow("But",1);
+  namedWindow("Balle",1);
+  namedWindow("Terrain",1);
+  namedWindow("Ligne",1);
 
   // The three object we're interesting in
   Segmentation *but = new But();
@@ -56,9 +59,13 @@ int main(void){
   Mat frame, frameModif;
 
   for(int nb=0;nb<nbImg;nb++){
-    frame = imread(path+filename+to_string(nb)+ext);//img are in BGR
+    frame = imread(path+filename+to_string(nb)+ext);//frame is in BGR
     frameModif=frame;
     imshow("image", frame);
+    but->resetImg();
+    terrain->resetImg();
+    balle->resetImg();
+    ligne->resetImg();
     for(int x = 0; x < frame.cols; x++ ){
       for( int y = 0; y < frame.rows; y++ ){
         Vec3b pixel=frame.at<Vec3b>(y,x);
@@ -73,23 +80,31 @@ int main(void){
         double V=0.877*(R-Y);
         if(but->Mahalanobis(R,G)){
             frameModif.at<Vec3b>(y,x)=Vec3b(255,0,0);
+            but->img.at<float>(y,x)=255;
         }else if(balle->Mahalanobis(U,V)){
             frameModif.at<Vec3b>(y,x)=Vec3b(0,127,255);
+            balle->img.at<float>(y,x)=255;
         }else if (terrain->Mahalanobis(R,G)){
           frameModif.at<Vec3b>(y,x)=Vec3b(0,255,0);
+          terrain->img.at<float>(y,x)=255;
         }else if (ligne->Mahalanobis(G,B)){
           frameModif.at<Vec3b>(y,x)=Vec3b(255,255,255);
+          ligne->img.at<float>(y,x)=255;
         }else{
           frameModif.at<Vec3b>(y,x)=Vec3b(0,0,0);
         }
       }
     }
-    Mat frameCR=frameModif.clone();
-    erode(frameCR,frameCR,Mat(),Point(-1,-1),1);
-    dilate(frameCR,frameCR,Mat(),Point(-1,-1),3);
+    //Mat frameCR=frameModif.clone();
+    //erode(frameCR,frameCR,Mat(),Point(-1,-1),1);
+    //dilate(frameCR,frameCR,Mat(),Point(-1,-1),3);
 
     imshow("modif image", frameModif);
-    imshow("erode dilate",frameCR);
+    //imshow("erode dilate",frameCR);
+    imshow("But", but->img);
+    imshow("Balle",balle->img);
+    imshow("Ligne", ligne->img);
+    imshow("Terrain",terrain->img);
     // Wait for a keypress
     int c = waitKey(1000);
     if(c!=-1){
