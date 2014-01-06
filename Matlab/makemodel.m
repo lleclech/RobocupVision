@@ -4,7 +4,7 @@ close all;
 clear all;
 
 %Extraction de la première image
-[A,map,alpha] = imread('../data/reference/terrain24.png');
+[A,map,alpha] = imread('../data/reference/terrain117.png');
 if isempty(A)
     return;
 end
@@ -126,7 +126,7 @@ for i=1:size(Cimg,2)
 end;
 
 %determination du seuil
-seuil = 9;
+seuil = 1.9;
 %seuilmax = max(D)/10;
 
 %crée l'image binaire
@@ -142,4 +142,4 @@ end;
 figure, imshow(imgBin)
 
 %sauvegarde
-save('terrain.txt', 'Mcov', 'Bary', '-ascii');
+save('newterrain.txt', 'Mcov', 'Bary', '-ascii');

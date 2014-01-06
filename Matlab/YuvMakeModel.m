@@ -151,4 +151,4 @@ end;
 figure, imshow(imgBin)
 
 %sauvegarde
-save('caca.txt', 'seuil', 'Mcov', 'Bary', '-ascii');
+save('yuvtest.txt', 'seuil', 'Mcov', 'Bary', '-ascii');
