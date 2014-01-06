@@ -6,23 +6,25 @@ class Robot{
 protected:
 
 
-
-
-
 public:
-  //virtual bool (double composante1, double composante2);
-  Robot(){
-    isBall=false;
-    nbPixelsBall=0;
-  }
-  virtual CvPoint barycentreBall(Mat frameModif);
-  virtual CvPoint barycentreGoal(Mat frameModif);
-  virtual bool marqueur(Mat frameModif, CvPoint barycentreBall, CvPoint barycentreGoal);
 
   int nbPixelsBall;
   int nbPixelsGoal;
   bool isBall;
   int position;
+
+
+  //virtual bool (double composante1, double composante2);
+  Robot(){
+    isBall=false;
+    nbPixelsBall = 0;
+    nbPixelsGoal = 0;
+    position = -1;
+  }
+  virtual CvPoint barycentreBall(Mat frameModif);
+  virtual CvPoint barycentreGoal(Mat frameModif);
+  virtual bool marqueur(Mat frameModif, CvPoint barycentreBall, CvPoint barycentreGoal);
+  virtual int goalPosition(Mat frameGoal, CvPoint barycentreGoal);
 
 private:
 
@@ -31,6 +33,7 @@ private:
 /**
  * Pour la nature des composantes, se référer à chaque classe en particulier.
  **/
+
 CvPoint Robot::barycentreBall(Mat frameModif){
 
     int x,y;
@@ -81,6 +84,29 @@ CvPoint Robot::barycentreGoal(Mat frameModif){
     if(nbPixelsGoal != 0)
         barycentre = cvPoint((sommeX/nbPixelsGoal),(sommeY/nbPixelsGoal));
     return barycentre;
+}
+
+int Robot::goalPosition(Mat frameGoal, CvPoint barycentreGoal){
+    int nbGauche =0;
+    int nbDroite =0;
+    int x,y;
+    for(x = 0; x < frameGoal.cols; x++) {
+        for(y = 0; y < frameGoal.rows; y++) {
+
+            if(frameGoal.at<float>(y,x)==255 && x < barycentreGoal.x)
+                nbGauche++;
+            if(frameGoal.at<float>(y,x)==255 && x > barycentreGoal.x)
+                nbDroite++;
+        }
+    }
+    if(barycentreGoal.x == -1)
+        return position =-1;
+    else if((nbGauche - nbDroite) > 50)
+        return position = 0;
+    else if((nbDroite - nbGauche) > 50)
+        return position = 2;
+    else
+        return position = 1;
 }
 
 bool Robot::marqueur(Mat frameModif, CvPoint barycentreBall, CvPoint barycentreGoal){

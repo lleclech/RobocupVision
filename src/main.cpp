@@ -109,6 +109,8 @@ int main(void){
     CvPoint barycentreBall = robot->barycentreBall(frameBall);
     CvPoint barycentreGoal = robot->barycentreGoal(frameGoal);
     robot->marqueur(frameModif,barycentreBall,barycentreGoal);
+    robot->goalPosition(frameGoal,barycentreGoal);
+    cout << robot->position << endl;
     imshow("modif image", frameModif);
     //imshow("erode dilate",frameCR);
     imshow("But", frameGoal);
