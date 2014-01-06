@@ -2,8 +2,8 @@
 
 class Terrain: public Segmentation {
 public:
-  Terrain():Segmentation(5.0000000, 112.72153, 40.843343, 40.843343,
-	       97.098807, 107.37870, 176.54343){}
+  Terrain():Segmentation(1.9000000, 342.52, 239.35,239.35,
+			 732.25, 98.03,180.47){}
 };
 
 /* R G */

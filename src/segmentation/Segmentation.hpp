@@ -17,7 +17,7 @@ protected:
 public:
   virtual bool Mahalanobis(double composante1, double composante2);
   Mat img;
-  void resetImg(){ img=Mat::zeros(240,320,CV_32F); }
+  void resetImg(){ img=Mat::zeros(240,320,CV_8UC1); }
   
 private:
   double seuil, e1, e2, e3, e4, mu1, mu2;
