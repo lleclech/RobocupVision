@@ -47,8 +47,8 @@ int main(void){
   namedWindow("modif image",1);
   namedWindow("But",1);
   namedWindow("Balle",1);
-  namedWindow("Terrain",1);
-  namedWindow("Ligne",1);
+  //namedWindow("Terrain",1);
+  //namedWindow("Ligne",1);
 
   // The three object we're interesting in
   Segmentation *but = new But();
@@ -98,16 +98,21 @@ int main(void){
         }
       }
     }
-    Mat frameCR=frameModif.clone();
-    erode(frameCR,frameCR,Mat(),Point(-1,-1),1);
-    dilate(frameCR,frameCR,Mat(),Point(-1,-1),3);
-    CvPoint barycentre = robot->barycentre(frameCR);
-    cout << "valeur x: " << barycentre.x << "valeur y: " << barycentre.y << "nb pixel" << robot->nbPixelsBall <<endl;
-    robot->marqueur(frameCR,barycentre);
-    imshow("modif image", frameCR);
+    Mat frameBall=balle->img.clone();
+    erode(frameBall,frameBall,Mat(),Point(-1,-1),2);
+    dilate(frameBall,frameBall,Mat(),Point(-1,-1),3);
+
+    Mat frameGoal=but->img.clone();
+    erode(frameGoal,frameGoal,Mat(),Point(-1,-1),2);
+    dilate(frameGoal,frameGoal,Mat(),Point(-1,-1),3);
+
+    CvPoint barycentreBall = robot->barycentreBall(frameBall);
+    CvPoint barycentreGoal = robot->barycentreGoal(frameGoal);
+    robot->marqueur(frameModif,barycentreBall,barycentreGoal);
+    imshow("modif image", frameModif);
     //imshow("erode dilate",frameCR);
-    //imshow("But", but->img);
-    //imshow("Balle",balle->img);
+    imshow("But", frameGoal);
+    imshow("Balle",frameBall);
     //imshow("Ligne", ligne->img);
     //imshow("Terrain",terrain->img);
     // Wait for a keypress
