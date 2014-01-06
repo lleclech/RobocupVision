@@ -26,10 +26,21 @@ std::string to_string( const T & Value )
 }
 
 int main(void){
-  String path = "../data/log2/";
+  String path = "../data/log8/";
   String filename = "rgb";
   String ext=".png";
-  int nbImg=150;
+  int nbImg=341;
+  /*
+   *    log1 -> 25
+   *    log2 -> 150
+   *    log3 -> 80
+   *    log4 -> 51
+   *    log5 -> 105
+   *    log6 -> 70
+   *    log7 -> 75
+   *    log8 -> 341
+    */
+
 
   // The two windows we'll be using
   namedWindow("image",1);
@@ -59,14 +70,16 @@ int main(void){
         double Y=0.299*R+0.587*G+0.114*B;
         double U=0.492*(B-Y);
         double V=0.877*(R-Y);
-        if(balle->Mahalanobis(U,V)){
+        if(but->Mahalanobis(R,G)){
+            frameModif.at<Vec3b>(y,x)=Vec3b(255,0,0);
+        }else if(balle->Mahalanobis(U,V)){
             frameModif.at<Vec3b>(y,x)=Vec3b(0,127,255);
-        }else if(but->Mahalanobis(R,G)){
-          frameModif.at<Vec3b>(y,x)=Vec3b(255,0,0);
-        }else if (ligne->Mahalanobis(G,B)){
-          frameModif.at<Vec3b>(y,x)=Vec3b(0,0,0);
         }else if (terrain->Mahalanobis(R,G)){
           frameModif.at<Vec3b>(y,x)=Vec3b(0,255,0);
+        }else if (ligne->Mahalanobis(G,B)){
+          frameModif.at<Vec3b>(y,x)=Vec3b(255,255,255);
+        }else{
+          frameModif.at<Vec3b>(y,x)=Vec3b(0,0,0);
         }
       }
     }

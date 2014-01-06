@@ -25,7 +25,7 @@ private:
  * Pour la nature des composantes, se référer à chaque classe en particulier.
  **/
 bool Segmentation::Mahalanobis(double composante1, double composante2){
-  double a = composante2-mu1,
+  double a = composante1-mu1,
     b = composante2 - mu2;
   double det = e1*e4-e2*e3;
   double eps1 = e4/det,
