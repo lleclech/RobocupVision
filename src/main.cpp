@@ -37,23 +37,37 @@ int main(void){
 
   // The three object we're interesting in
   Segmentation but = new But();
-  //Segmentation ball = new Ball();
-  //Segmentation ligne = new Ligne(); 
-  //Segmentation terrain = new Terrain();
+  Segmentation balle = new Balle();
+  Segmentation ligne = new Ligne();
+  Segmentation terrain = new Terrain();
   
   Mat frame, frameModif;
+
   for(int nb=0;nb<nbImg;nb++){
-    frame = imread(path+filename+to_string(nb)+ext);
-    frameModif = frame;
+    frame = imread(path+filename+to_string(nb)+ext);//img are in BGR
     imshow("image", frame);
     for(int x = 0; x < frame.cols; x++ ){
       for( int y = 0; y < frame.rows; y++ ){
-	Vec3b pixel=frame.at<Vec3b>(y,x);
-	if(but.Mahalanobis(pixel[2],pixel[1])){
-	  frameModif.at<Vec3b>(y,x)=Vec3b(0,0,0);
-	}else{
-	  frameModif.at<Vec3b>(y,x)=Vec3b(250,250,250);
-	}
+        Vec3b pixel=frame.at<Vec3b>(y,x);
+        //RGB
+        float R=pixel[2];
+        float G=pixel[1];
+        float B=pixel[0];
+
+        //YUV convertion
+        float Y=0.299*R+0.587*G+0.114*B;
+        float U=0.492*(B-Y);
+        float V=0.877*(R-Y);
+
+        if(balle.Mahalanobis(U,V)){
+          frameModif.at<Vec3b>(y,x)=Vec3b(0,127,255);
+        }else if(but.Mahalanobis(R,G)){
+          frameModif.at<Vec3b>(y,x)=Vec3b(255,0,0);
+        }else if (ligne.Mahalanobis(G,B)){
+          frameModif.at<Vec3b>(y,x)=Vec3b(0,0,0);
+        }else if (terrain.Mahalanobis(R,G)){
+          frameModif.at<Vec3b>(y,x)=Vec3b(0,255,0);
+        }
       }
     }
     imshow("modif image", frameModif);
