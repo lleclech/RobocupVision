@@ -150,9 +150,15 @@ int main(void){
      **/
     Mat eraseGoal = but->img.clone();
     Canny(eraseGoal, eraseGoal, 50, 200, 3);
-    vector<Vec2f> lines;
-    HoughLines(eraseGoal, lines, 1, CV_PI/180, 100, 0, 0);
+    vector<Vec4i> lines;
+    //HoughLines(eraseGoal, lines, 1, CV_PI/180, 100, 0, 0);
+    HoughLinesP(eraseGoal, lines, 1.5, CV_PI/2, 40);
+    
     for( size_t i = 0; i < lines.size(); i++ ){
+      line( eraseGoal, Point(lines[i][0], lines[i][1]),
+	    Point(lines[i][2], lines[i][3]), 255, 8, CV_AA );
+    }
+    /*for( size_t i = 0; i < lines.size(); i++ ){
       float rho = lines[i][0], theta = lines[i][1];
       Point pt1, pt2;
       double a = cos(theta), b = sin(theta);
@@ -161,9 +167,8 @@ int main(void){
       pt1.y = cvRound(y0 + 1000*(a));
       pt2.x = cvRound(x0 - 1000*(-b));
       pt2.y = cvRound(y0 - 1000*(a));
-      //line(eraseGoal, pt1, pt2, 255, 3, CV_AA);
-    }
-
+      line(eraseGoal, pt1, pt2, 255, 3, CV_AA);
+    }*/
 
     /**
      * Filtre eraseBalle appliqué à l'image de la balle
